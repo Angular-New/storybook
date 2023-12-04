@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
 import { action } from '@storybook/addon-actions';
 
-import TaskComponent from '../components/task/task.component';
+import TaskComponent from '../../app/components/task/task.component';
 
 export const actionsData = {
   onPinTask: action('onPinTask'),
@@ -10,7 +10,7 @@ export const actionsData = {
 };
 
 const meta: Meta<TaskComponent> = {
-  title: 'Task',
+  title: 'Page/Task',
   component: TaskComponent,
   excludeStories: /.*Data$/,
   tags: ['autodocs'],
