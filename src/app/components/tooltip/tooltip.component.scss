@@ -1,7 +1,8 @@
 @import '@taiga-ui/core/styles/taiga-ui-local';
+@import '../src/stories/shared/styles/index.scss';
 
 :host {
-  .transition(color);
+  @include transition(color);
   position: relative;
   display: inline-block;
   width: 1.5rem;
