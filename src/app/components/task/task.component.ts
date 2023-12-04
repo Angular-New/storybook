@@ -5,7 +5,7 @@ import { ITask } from "../../models";
   selector: 'app-task',
   templateUrl: './task.component.html',
 })
-export default class TaskComponent {
+export class TaskComponent {
   /**
    * The shape of the task object
    */
