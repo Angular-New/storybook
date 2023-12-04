@@ -1,0 +1,20 @@
+<span
+  #driver="tuiHintHover"
+  appearance="icon"
+  automation-id="tui-tooltip__icon"
+  tuiWrapper
+  class="t-tooltip-icon"
+  [hover]="(driver | async) || null"
+  [tuiHint]="content"
+  [tuiHintAppearance]="computedAppearance"
+  [tuiHintContext]="context"
+  [tuiHintDescribe]="describeId"
+  [tuiHintDirection]="direction"
+  [tuiHintHideDelay]="hideDelay"
+  [tuiHintShowDelay]="showDelay"
+>
+    <tui-svg
+      *polymorpheusOutlet="icon as src"
+      [src]="src"
+    ></tui-svg>
+</span>
