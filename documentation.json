@@ -4,7 +4,7 @@
         {
             "name": "ITask",
             "id": "interface-ITask-be3cee0e4abb7c170fb4f3f5224d43c2b4f2e741ec585e700e90109d5b68375b0878362d0b8539e872690d0a5e506e22faef452e1b107f0837f16ac55ffb361a",
-            "file": "src/app/models/task.model.ts",
+            "file": "src/app/components/task/task.model.ts",
             "deprecated": false,
             "deprecationMessage": "",
             "type": "interface",
@@ -55,7 +55,41 @@
             "methods": []
         }
     ],
-    "injectables": [],
+    "injectables": [
+        {
+            "name": "TuiDestroyService",
+            "id": "injectable-TuiDestroyService-bd909dcfdd103ec780a92a384a0821547eb4e53a443e91c6853af7b96d4b6937ef0feda33dd1bea2857ab05b93b3d3aa96956e4d321b2b86e78c583d9f5f820a",
+            "file": "src/app/components/tooltip/tooltip.service.ts",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "ngOnDestroy",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 18,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "description": "<p>Observable abstraction over ngOnDestroy to use with takeUntil</p>\n<p>Why we use <code>ReplaySubject</code> instead of <code>Subject</code>?\nWell, we’ll use ReplaySubject to emit the last message in case\nthe subscription is ended after the component is destroyed.</p>\n",
+            "rawdescription": "\n\nObservable abstraction over ngOnDestroy to use with takeUntil\n\nWhy we use `ReplaySubject` instead of `Subject`?\nWell, we’ll use ReplaySubject to emit the last message in case\nthe subscription is ended after the component is destroyed.\n",
+            "sourceCode": "import { Injectable, OnDestroy } from '@angular/core';\nimport { ReplaySubject } from 'rxjs';\n\n/**\n * @note:\n * Observable abstraction over ngOnDestroy to use with takeUntil\n *\n * Why we use `ReplaySubject` instead of `Subject`?\n * Well, we’ll use ReplaySubject to emit the last message in case\n * the subscription is ended after the component is destroyed.\n */\n@Injectable()\nexport class TuiDestroyService extends ReplaySubject<void> implements OnDestroy {\n  constructor() {\n    super(1);\n  }\n\n  ngOnDestroy(): void {\n    this.next();\n    this.complete();\n  }\n}\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [],
+                "line": 13
+            },
+            "extends": "ReplaySubject",
+            "type": "injectable"
+        }
+    ],
     "guards": [],
     "interceptors": [],
     "classes": [],
@@ -391,7 +425,7 @@
         },
         {
             "name": "TaskComponent",
-            "id": "component-TaskComponent-51f893afb9335263f0b1fd177ecd0a1527a557d680759c9227f6ef938010fe7327ce6de81cbc076aa6480c8a8083ba0f79961020e97a83f8647ccd5502a4958d",
+            "id": "component-TaskComponent-55655fbe6c97bd9a5799a8c5efe71b2618a20e524a2d42e6a419575133f9c111d452fd0aea155fab5c044666d2f769137cdf6a4d98308901be4141d309421010",
             "file": "src/app/components/task/task.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -445,7 +479,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, Input, Output, EventEmitter } from '@angular/core';\nimport { ITask } from \"../../models\";\n\n@Component({\n  selector: 'app-task',\n  templateUrl: './task.component.html',\n})\nexport class TaskComponent {\n  /**\n   * The shape of the task object\n   */\n  @Input() task: ITask = <ITask>{};\n\n  // tslint:disable-next-line: no-output-on-prefix\n  @Output()\n  onPinTask: EventEmitter<Event> = new EventEmitter<Event>();\n\n  // tslint:disable-next-line: no-output-on-prefix\n  @Output()\n  onArchiveTask: EventEmitter<Event> = new EventEmitter<Event>();\n\n  /**\n   * @ignore\n   * Component method to trigger the onPin event\n   * @param id string\n   */\n  onPin(id: any): void {\n    this.onPinTask.emit(id);\n  }\n\n  /**\n   * @ignore\n   * Component method to trigger the onArchive event\n   * @param id string\n   */\n  onArchive(id: any): void {\n    this.onArchiveTask.emit();\n  }\n}\n",
+            "sourceCode": "import { Component, Input, Output, EventEmitter } from '@angular/core';\nimport { ITask } from \"./task.model\";\n\n@Component({\n  selector: 'app-task',\n  templateUrl: './task.component.html',\n})\nexport class TaskComponent {\n  /**\n   * The shape of the task object\n   */\n  @Input() task: ITask = <ITask>{};\n\n  // tslint:disable-next-line: no-output-on-prefix\n  @Output()\n  onPinTask: EventEmitter<Event> = new EventEmitter<Event>();\n\n  // tslint:disable-next-line: no-output-on-prefix\n  @Output()\n  onArchiveTask: EventEmitter<Event> = new EventEmitter<Event>();\n\n  /**\n   * @ignore\n   * Component method to trigger the onPin event\n   * @param id string\n   */\n  onPin(id: any): void {\n    this.onPinTask.emit(id);\n  }\n\n  /**\n   * @ignore\n   * Component method to trigger the onArchive event\n   * @param id string\n   */\n  onArchive(id: any): void {\n    this.onArchiveTask.emit();\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": "",
             "stylesData": "",
@@ -453,44 +487,246 @@
         },
         {
             "name": "TooltipComponent",
-            "id": "component-TooltipComponent-35fb5e3c7de03000a6dab1b67e6971eb84056289666ef06b0dc1caeda8e46dee7705e7bb5d1a3167e605e44a5b7407df5d137280f518434d86f8b512b12aca74",
+            "id": "component-TooltipComponent-47bec97af7275ad3b533dedd1b0511b3cd3bcbdf86252ec99701945dc0dcf69faee394952f11780b7dd9f778f0853453c0a7706ea363a3774ae4703edd2e6132",
             "file": "src/app/components/tooltip/tooltip.component.ts",
             "changeDetection": "ChangeDetectionStrategy.OnPush",
             "encapsulation": [],
             "entryComponents": [],
             "inputs": [],
             "outputs": [],
-            "providers": [],
+            "providers": [
+                {
+                    "name": "TuiDestroyService"
+                },
+                {
+                    "name": "MODE_PROVIDER"
+                }
+            ],
             "selector": "app-tooltip",
             "styleUrls": [
-                "./tooltip.component.css"
+                "./tooltip.component.scss"
             ],
             "styles": [],
             "templateUrl": [
                 "./tooltip.component.html"
             ],
             "viewProviders": [],
-            "inputsClass": [],
+            "inputsClass": [
+                {
+                    "name": "context",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 40,
+                    "type": "C",
+                    "decorators": []
+                },
+                {
+                    "name": "describeId",
+                    "defaultValue": "''",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 37,
+                    "type": "string",
+                    "decorators": []
+                }
+            ],
             "outputsClass": [],
-            "propertiesClass": [],
-            "methodsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "driver$",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "TuiHintHoverDirective",
+                    "optional": true,
+                    "description": "",
+                    "line": 34,
+                    "decorators": [
+                        {
+                            "name": "ViewChild",
+                            "stringifiedArguments": "TuiHintHoverDirective"
+                        }
+                    ],
+                    "modifierKind": [
+                        144
+                    ]
+                },
+                {
+                    "name": "mode",
+                    "defaultValue": "null",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "TuiBrightness | null",
+                    "optional": false,
+                    "description": "",
+                    "line": 31,
+                    "modifierKind": [
+                        121
+                    ]
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "stopOnMobile",
+                    "args": [
+                        {
+                            "name": "event",
+                            "type": "MouseEvent",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 61,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "decorators": [
+                        {
+                            "name": "HostListener",
+                            "stringifiedArguments": "'mousedown', ['$event']"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "event",
+                            "type": "MouseEvent",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
             "deprecated": false,
             "deprecationMessage": "",
-            "hostBindings": [],
-            "hostListeners": [],
+            "hostBindings": [
+                {
+                    "name": "attr.data-appearance",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 56,
+                    "type": "string",
+                    "decorators": []
+                }
+            ],
+            "hostListeners": [
+                {
+                    "name": "mousedown",
+                    "args": [
+                        {
+                            "name": "event",
+                            "type": "MouseEvent",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "argsDecorator": [
+                        "$event"
+                    ],
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 61
+                }
+            ],
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\n@Component({\n  selector: 'app-tooltip',\n  templateUrl: './tooltip.component.html',\n  styleUrls: ['./tooltip.component.css'],\n  changeDetection: ChangeDetectionStrategy.OnPush\n})\nexport class TooltipComponent {\n  //\n}\n",
+            "sourceCode": "import {\n  ChangeDetectionStrategy,\n  Component,\n  HostBinding,\n  HostListener,\n  Inject,\n  Input,\n  Self,\n  ViewChild\n} from '@angular/core';\nimport { Observable, takeUntil } from \"rxjs\";\nimport {\n  MODE_PROVIDER,\n  TUI_HINT_OPTIONS,\n  TUI_MODE,\n  TuiBrightness,\n  TuiHintHoverDirective,\n  TuiHintOptions, TuiHintOptionsDirective\n} from \"@taiga-ui/core\";\nimport { TuiDestroyService } from \"./tooltip.service\";\nimport { TUI_IS_MOBILE } from \"./tooltip.token\";\n\n@Component({\n  selector: 'app-tooltip',\n  templateUrl: './tooltip.component.html',\n  styleUrls: ['./tooltip.component.scss'],\n  providers: [TuiDestroyService, MODE_PROVIDER],\n  changeDetection: ChangeDetectionStrategy.OnPush\n})\nexport class TooltipComponent<C = any> extends TuiHintOptionsDirective {\n  private mode: TuiBrightness | null = null;\n\n  @ViewChild(TuiHintHoverDirective)\n  readonly driver$?: TuiHintHoverDirective;\n\n  @Input()\n  describeId = '';\n\n  @Input()\n  context?: C;\n\n  constructor(\n    @Self() @Inject(TuiDestroyService) destroy$: Observable<unknown>,\n    @Inject(TUI_MODE) mode$: Observable<TuiBrightness | null>,\n    @Inject(TUI_HINT_OPTIONS) options: TuiHintOptions,\n    @Inject(TUI_IS_MOBILE) private readonly isMobile: boolean,\n  ) {\n    super(options);\n\n    mode$.pipe(takeUntil(destroy$)).subscribe(mode => {\n      this.mode = mode;\n    });\n  }\n\n  @HostBinding('attr.data-appearance')\n  get computedAppearance(): string {\n    return this.appearance || this.mode || '';\n  }\n\n  @HostListener('mousedown', ['$event'])\n  stopOnMobile(event: MouseEvent): void {\n    if (this.isMobile) {\n      event.preventDefault();\n      event.stopPropagation();\n    }\n\n    this.driver$?.toggle();\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "",
-                    "styleUrl": "./tooltip.component.css"
+                    "data": "@import '@taiga-ui/core/styles/taiga-ui-local';\n@import './tooltip.mixin';\n\n:host {\n  @include transition(color);\n  position: relative;\n  display: inline-block;\n  width: 1.5rem;\n  height: 1.5rem;\n  vertical-align: middle;\n  font-size: 0;\n  line-height: 0;\n  pointer-events: auto;\n  cursor: pointer;\n  color: var(--tui-text-01);\n\n  &[data-appearance='error'] {\n    color: var(--tui-error-fill);\n  }\n}\n\n.t-tooltip-icon {\n  display: inline-block;\n  width: 100%;\n  height: 100%;\n  color: inherit;\n\n  :host-context([tuiWrapper][data-appearance='textfield'][data-state='disabled']) & {\n    opacity: 1;\n  }\n}\n",
+                    "styleUrl": "./tooltip.component.scss"
                 }
             ],
             "stylesData": "",
-            "templateData": ""
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "destroy$",
+                        "type": "Observable<>",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    },
+                    {
+                        "name": "mode$",
+                        "type": "Observable<TuiBrightness | null>",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    },
+                    {
+                        "name": "options",
+                        "type": "TuiHintOptions",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    },
+                    {
+                        "name": "isMobile",
+                        "type": "boolean",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 40,
+                "jsdoctags": [
+                    {
+                        "name": "destroy$",
+                        "type": "Observable<>",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "mode$",
+                        "type": "Observable<TuiBrightness | null>",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "options",
+                        "type": "TuiHintOptions",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "isMobile",
+                        "type": "boolean",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "extends": "TuiHintOptionsDirective",
+            "accessors": {
+                "computedAppearance": {
+                    "name": "computedAppearance",
+                    "getSignature": {
+                        "name": "computedAppearance",
+                        "type": "string",
+                        "returnType": "string",
+                        "line": 56
+                    }
+                }
+            },
+            "templateData": "<span\n  #driver=\"tuiHintHover\"\n  appearance=\"icon\"\n  automation-id=\"tui-tooltip__icon\"\n  tuiWrapper\n  class=\"t-tooltip-icon\"\n  [hover]=\"(driver | async) || null\"\n  [tuiHint]=\"content\"\n  [tuiHintAppearance]=\"computedAppearance\"\n  [tuiHintContext]=\"context\"\n  [tuiHintDescribe]=\"describeId\"\n  [tuiHintDirection]=\"direction\"\n  [tuiHintHideDelay]=\"hideDelay\"\n  [tuiHintShowDelay]=\"showDelay\"\n>\n    <tui-svg\n      *polymorpheusOutlet=\"icon as src\"\n      [src]=\"src\"\n    ></tui-svg>\n</span>\n"
         }
     ],
     "modules": [
@@ -534,6 +770,50 @@
                             "name": "AppComponent"
                         }
                     ]
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "TooltipModule",
+            "id": "module-TooltipModule-2a131c534821cfd75083fbe842bf028ac78567f0326ed28723c49b8d8aca2aa2909046e8f18509ddd17bd2a6a8e339612b9400bf65de963e41c864ad7ef51c7e",
+            "description": "",
+            "deprecationMessage": "",
+            "deprecated": false,
+            "file": "src/app/components/tooltip/tooltip.module.ts",
+            "methods": [],
+            "sourceCode": "import { CommonModule } from '@angular/common';\nimport { NgModule } from '@angular/core';\nimport { TuiSvgModule } from '@taiga-ui/core/components/svg';\nimport { TuiHintModule } from '@taiga-ui/core/directives/hint';\nimport { TuiWrapperModule } from '@taiga-ui/core/directives/wrapper';\nimport { PolymorpheusModule } from '@tinkoff/ng-polymorpheus';\n\nimport { TooltipComponent } from './tooltip.component';\n\n@NgModule({\n  imports: [\n    CommonModule,\n    TuiWrapperModule,\n    TuiSvgModule,\n    TuiHintModule,\n    PolymorpheusModule,\n  ],\n  declarations: [ TooltipComponent ],\n  exports: [ TooltipComponent ],\n})\nexport class TooltipModule {}\n",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "TooltipComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": [
+                        {
+                            "name": "TooltipComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
                 },
                 {
                     "type": "classes",
@@ -593,6 +873,16 @@
                 "deprecationMessage": "",
                 "type": "object",
                 "defaultValue": "{\n  production: false,\n}"
+            },
+            {
+                "name": "firstRegex",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/components/tooltip/tooltip.token.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "/(android|bb\\d+|meego).+mobile|avantgo|bada\\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\\.(browser|link)|vodafone|wap|windows ce|xda|xiino/"
             },
             {
                 "name": "Large",
@@ -685,6 +975,16 @@
                 "defaultValue": "{\n  title: 'Page/Task',\n  component: TaskComponent,\n  excludeStories: /.*Data$/,\n  tags: ['autodocs'],\n  render: (args: TaskComponent) => ({\n    props: {\n      ...args,\n      onPinTask: actionsData.onPinTask,\n      onArchiveTask: actionsData.onArchiveTask,\n    },\n    template: `<app-task ${argsToTemplate(args)}></app-task>`,\n  }),\n}"
             },
             {
+                "name": "meta",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/stories/tooltip/tolltip.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Meta<TooltipComponent>",
+                "defaultValue": "{\n  title: 'Component/Tooltip',\n  component: TooltipComponent,\n  excludeStories: /.*Data$/,\n  tags: ['autodocs'],\n  render: (args: TooltipComponent) => ({\n    props: {\n      ...args,\n      // onPinTask: actionsData.onPinTask,\n      // onArchiveTask: actionsData.onArchiveTask,\n    },\n    template: `<app-tooltip ${argsToTemplate(args)}></app-tooltip>`,\n  }),\n}"
+            },
+            {
                 "name": "Pinned",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
@@ -725,6 +1025,16 @@
                 "defaultValue": "{\n  args: {\n    label: 'Button',\n  },\n}"
             },
             {
+                "name": "secondRegex",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/components/tooltip/tooltip.token.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw-(n|u)|c55\\/|capi|ccwa|cdm-|cell|chtm|cldc|cmd-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc-s|devi|dica|dmob|do(c|p)o|ds(12|-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(-|_)|g1 u|g560|gene|gf-5|g-mo|go(\\.w|od)|gr(ad|un)|haie|hcit|hd-(m|p|t)|hei-|hi(pt|ta)|hp( i|ip)|hs-c|ht(c(-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i-(20|go|ma)|i230|iac( |-|\\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\\/)|klon|kpt |kwc-|kyo(c|k)|le(no|xi)|lg( g|\\/(k|l|u)|50|54|-[a-w])|libw|lynx|m1-w|m3ga|m50\\/|ma(te|ui|xo)|mc(01|21|ca)|m-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|-([1-8]|c))|phil|pire|pl(ay|uc)|pn-2|po(ck|rt|se)|prox|psio|pt-g|qa-a|qc(07|12|21|32|60|-[2-7]|i-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h-|oo|p-)|sdk\\/|se(c(-|0|1)|47|mc|nd|ri)|sgh-|shar|sie(-|m)|sk-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h-|v-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl-|tdg-|tel(i|m)|tim-|t-mo|to(pl|sh)|ts(70|m-|m3|m5)|tx-9|up(\\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas-|your|zeto|zte-/"
+            },
+            {
                 "name": "Small",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
@@ -733,6 +1043,18 @@
                 "deprecationMessage": "",
                 "type": "Story",
                 "defaultValue": "{\n  args: {\n    size: 'small',\n    label: 'Button',\n  },\n}"
+            },
+            {
+                "name": "TUI_IS_MOBILE",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/components/tooltip/tooltip.token.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "tuiCreateTokenFromFactory(\n  () =>\n    firstRegex.test(inject(USER_AGENT).toLowerCase()) ||\n    secondRegex.test(inject(USER_AGENT).slice(0, 4).toLowerCase()),\n)",
+                "rawdescription": "Mobile browser detection",
+                "description": "<p>Mobile browser detection</p>\n"
             }
         ],
         "functions": [],
@@ -776,6 +1098,17 @@
                 "subtype": "typealias",
                 "rawtype": "StoryObj<TaskComponent>",
                 "file": "src/stories/task/task.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "kind": 177
+            },
+            {
+                "name": "Story",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "StoryObj<TooltipComponent>",
+                "file": "src/stories/tooltip/tolltip.stories.ts",
                 "deprecated": false,
                 "deprecationMessage": "",
                 "description": "",
@@ -858,6 +1191,40 @@
                     "deprecationMessage": "",
                     "type": "object",
                     "defaultValue": "{\n  production: false,\n}"
+                }
+            ],
+            "src/app/components/tooltip/tooltip.token.ts": [
+                {
+                    "name": "firstRegex",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/components/tooltip/tooltip.token.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "/(android|bb\\d+|meego).+mobile|avantgo|bada\\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\\.(browser|link)|vodafone|wap|windows ce|xda|xiino/"
+                },
+                {
+                    "name": "secondRegex",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/components/tooltip/tooltip.token.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw-(n|u)|c55\\/|capi|ccwa|cdm-|cell|chtm|cldc|cmd-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc-s|devi|dica|dmob|do(c|p)o|ds(12|-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(-|_)|g1 u|g560|gene|gf-5|g-mo|go(\\.w|od)|gr(ad|un)|haie|hcit|hd-(m|p|t)|hei-|hi(pt|ta)|hp( i|ip)|hs-c|ht(c(-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i-(20|go|ma)|i230|iac( |-|\\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\\/)|klon|kpt |kwc-|kyo(c|k)|le(no|xi)|lg( g|\\/(k|l|u)|50|54|-[a-w])|libw|lynx|m1-w|m3ga|m50\\/|ma(te|ui|xo)|mc(01|21|ca)|m-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|-([1-8]|c))|phil|pire|pl(ay|uc)|pn-2|po(ck|rt|se)|prox|psio|pt-g|qa-a|qc(07|12|21|32|60|-[2-7]|i-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h-|oo|p-)|sdk\\/|se(c(-|0|1)|47|mc|nd|ri)|sgh-|shar|sie(-|m)|sk-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h-|v-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl-|tdg-|tel(i|m)|tim-|t-mo|to(pl|sh)|ts(70|m-|m3|m5)|tx-9|up(\\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas-|your|zeto|zte-/"
+                },
+                {
+                    "name": "TUI_IS_MOBILE",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/components/tooltip/tooltip.token.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "tuiCreateTokenFromFactory(\n  () =>\n    firstRegex.test(inject(USER_AGENT).toLowerCase()) ||\n    secondRegex.test(inject(USER_AGENT).slice(0, 4).toLowerCase()),\n)",
+                    "rawdescription": "Mobile browser detection",
+                    "description": "<p>Mobile browser detection</p>\n"
                 }
             ],
             "src/stories/button/button.stories.ts": [
@@ -976,6 +1343,18 @@
                     "defaultValue": "{\n  title: 'Example/Page',\n  component: Page,\n  parameters: {\n    // More on how to position stories at: https://storybook.js.org/docs/angular/configure/story-layout\n    layout: 'fullscreen',\n  },\n  decorators: [\n    moduleMetadata({\n      declarations: [Button, Header],\n      imports: [CommonModule],\n    }),\n  ],\n}"
                 }
             ],
+            "src/stories/tooltip/tolltip.stories.ts": [
+                {
+                    "name": "meta",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/stories/tooltip/tolltip.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Meta<TooltipComponent>",
+                    "defaultValue": "{\n  title: 'Component/Tooltip',\n  component: TooltipComponent,\n  excludeStories: /.*Data$/,\n  tags: ['autodocs'],\n  render: (args: TooltipComponent) => ({\n    props: {\n      ...args,\n      // onPinTask: actionsData.onPinTask,\n      // onArchiveTask: actionsData.onArchiveTask,\n    },\n    template: `<app-tooltip ${argsToTemplate(args)}></app-tooltip>`,\n  }),\n}"
+                }
+            ],
             ".storybook/preview.ts": [
                 {
                     "name": "preview",
@@ -1043,12 +1422,25 @@
                     "description": "",
                     "kind": 177
                 }
+            ],
+            "src/stories/tooltip/tolltip.stories.ts": [
+                {
+                    "name": "Story",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "StoryObj<TooltipComponent>",
+                    "file": "src/stories/tooltip/tolltip.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "kind": 177
+                }
             ]
         }
     },
     "routes": [],
     "coverage": {
-        "count": 4,
+        "count": 7,
         "status": "low",
         "files": [
             {
@@ -1080,22 +1472,61 @@
                 "status": "low"
             },
             {
-                "filePath": "src/app/components/tooltip/tooltip.component.ts",
-                "type": "component",
-                "linktype": "component",
-                "name": "TooltipComponent",
-                "coveragePercent": 0,
-                "coverageCount": "0/1",
-                "status": "low"
-            },
-            {
-                "filePath": "src/app/models/task.model.ts",
+                "filePath": "src/app/components/task/task.model.ts",
                 "type": "interface",
                 "linktype": "interface",
                 "name": "ITask",
                 "coveragePercent": 0,
                 "coverageCount": "0/4",
                 "status": "low"
+            },
+            {
+                "filePath": "src/app/components/tooltip/tooltip.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "TooltipComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/9",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/components/tooltip/tooltip.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "TuiDestroyService",
+                "coveragePercent": 33,
+                "coverageCount": "1/3",
+                "status": "medium"
+            },
+            {
+                "filePath": "src/app/components/tooltip/tooltip.token.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "firstRegex",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/components/tooltip/tooltip.token.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "secondRegex",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/components/tooltip/tooltip.token.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "TUI_IS_MOBILE",
+                "coveragePercent": 100,
+                "coverageCount": "1/1",
+                "status": "very-good"
             },
             {
                 "filePath": "src/environments/environment.prod.ts",
@@ -1309,6 +1740,16 @@
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
                 "name": "Pinned",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/stories/tooltip/tolltip.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "meta",
                 "coveragePercent": 0,
                 "coverageCount": "0/1",
                 "status": "low"
