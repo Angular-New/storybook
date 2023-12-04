@@ -8,7 +8,15 @@ import {
   Self,
   ViewChild
 } from '@angular/core';
-import {Observable, takeUntil} from "rxjs";
+import { Observable, takeUntil } from "rxjs";
+import {
+  MODE_PROVIDER,
+  TUI_HINT_OPTIONS,
+  TUI_MODE,
+  TuiBrightness,
+  TuiHintHoverDirective,
+  TuiHintOptions
+} from "@taiga-ui/core";
 
 @Component({
   selector: 'app-tooltip',
