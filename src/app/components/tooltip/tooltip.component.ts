@@ -15,8 +15,10 @@ import {
   TUI_MODE,
   TuiBrightness,
   TuiHintHoverDirective,
-  TuiHintOptions
+  TuiHintOptions, TuiHintOptionsDirective
 } from "@taiga-ui/core";
+import { TuiDestroyService } from "./tooltip.service";
+import { TUI_IS_MOBILE } from "./tooltip.token";
 
 @Component({
   selector: 'app-tooltip',
@@ -25,7 +27,7 @@ import {
   providers: [TuiDestroyService, MODE_PROVIDER],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TooltipComponent {
+export class TooltipComponent<C = any> extends TuiHintOptionsDirective {
   private mode: TuiBrightness | null = null;
 
   @ViewChild(TuiHintHoverDirective)
